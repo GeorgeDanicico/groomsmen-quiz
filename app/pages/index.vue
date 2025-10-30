@@ -1,6 +1,49 @@
 <template>
-  <div class="min-h-screen bg-gray-50 py-10 dark:bg-gray-900">
-    <UContainer>
+  <div class="min-h-screen bg-gray-50 py-16 dark:bg-gray-900">
+    <UContainer class="space-y-10">
+      <header class="space-y-3 text-center">
+        <h1 class="text-3xl font-bold text-gray-900 dark:text-gray-100">
+          Welcome to the Groomsmen Quiz Night
+        </h1>
+        <p class="mx-auto max-w-2xl text-base text-gray-600 dark:text-gray-400">
+          Set the stage for an unforgettable evening with trivia tailored for your crew.
+          Create a custom quiz or join one that's already underway.
+        </p>
+      </header>
+
+      <div class="grid gap-6 md:grid-cols-2">
+        <UCard class="space-y-4">
+          <div class="space-y-2">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Create a quiz
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Build a fresh quiz session for your groomsmen. Add your questions and host the game.
+            </p>
+          </div>
+          <UButton color="primary" block @click="router.push('/create-quiz')">
+            Create Quiz
+          </UButton>
+        </UCard>
+
+        <UCard class="space-y-4">
+          <div class="space-y-2">
+            <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-100">
+              Join a quiz
+            </h2>
+            <p class="text-sm text-gray-600 dark:text-gray-400">
+              Already have an invite? Enter the passcode to join the fun.
+            </p>
+          </div>
+          <UForm class="space-y-3">
+            <UInput placeholder="Enter quiz passcode" disabled />
+            <UButton color="primary" block disabled>
+              Join Quiz (coming soon)
+            </UButton>
+          </UForm>
+        </UCard>
+      </div>
+
       <div class="grid gap-6 lg:grid-cols-2">
         <div class="space-y-4">
           <QuizJoinForm

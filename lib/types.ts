@@ -96,3 +96,23 @@ export interface SubmitAnswerPayload {
   readonly questionId: string;
   readonly optionId: string;
 }
+
+export interface CreateQuizDetails {
+  questions: number | null;
+  responseTime: number | null;
+  maxPlayers: number | null;
+}
+
+export interface CreateQuizQuestionOptionDraft {
+  readonly id: string;
+  readonly text: string;
+}
+
+export interface CreateQuizQuestionDraft {
+  readonly id: string;
+  readonly prompt: string;
+  readonly options: CreateQuizQuestionOptionDraft[];
+  readonly correctOptionId: string;
+}
+
+export type CreateQuizQuestionInput = Omit<CreateQuizQuestionDraft, 'id'>;
