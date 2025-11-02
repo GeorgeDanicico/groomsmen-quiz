@@ -24,6 +24,7 @@ const localForm = reactive<CreateQuizDetails>({
 watch(
   () => props.modelValue,
   (value) => {
+    console.log('changes');
     localForm.questions = value.questions;
     localForm.responseTime = value.responseTime;
     localForm.maxPlayers = value.maxPlayers;
@@ -34,6 +35,9 @@ watch(
 watch(
   localForm,
   (value) => {
+    console.log(value);
+    console.log(localForm);
+    console.log(props.modelValue);
     emit('update:modelValue', {
       questions: value.questions ?? null,
       responseTime: value.responseTime ?? null,

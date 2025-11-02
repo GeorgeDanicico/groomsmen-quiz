@@ -13,6 +13,8 @@ const props = defineProps<{
   error?: string;
 }>();
 
+console.log("this component")
+
 const emit = defineEmits<{
   (event: 'add-question', value: CreateQuizQuestionInput): void;
   (event: 'remove-question', questionId: string): void;

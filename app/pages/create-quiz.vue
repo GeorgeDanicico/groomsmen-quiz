@@ -41,6 +41,13 @@
           </template>
         </UTabs>
 
+        <div v-if="submissionError" class="rounded-md border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700 dark:border-rose-900 dark:bg-rose-900/40 dark:text-rose-200">
+          {{ submissionError }}
+        </div>
+        <div v-else-if="successMessage" class="rounded-md border border-emerald-200 bg-emerald-50 p-3 text-sm text-emerald-700 dark:border-emerald-900 dark:bg-emerald-900/40 dark:text-emerald-200">
+          {{ successMessage }}
+        </div>
+
         <div class="flex items-center justify-between">
           <UButton
             color="gray"
@@ -61,9 +68,11 @@
             <UButton
               v-else
               color="primary"
-              disabled
+              :loading="submitting"
+              :disabled="submitting"
+              @click="submitQuiz"
             >
-              Create the quiz (mock)
+              Create quiz
             </UButton>
           </div>
         </div>
@@ -96,7 +105,7 @@ const tabs = [
 const activeStep = ref(0);
 const unlockedSteps = ref([true, false, false]);
 
-const detailsForm = reactive<CreateQuizDetails>({
+const detailsForm = ref<CreateQuizDetails>({
   questions: null,
   responseTime: null,
   maxPlayers: null
@@ -110,6 +119,9 @@ const detailsErrors = reactive({
 
 const questions = ref<CreateQuizQuestionDraft[]>([]);
 const questionsError = ref('');
+const submissionError = ref<string | null>(null);
+const submitting = ref(false);
+const successMessage = ref<string | null>(null);
 
 const clearDetailErrors = () => {
   detailsErrors.questions = '';
@@ -147,10 +159,12 @@ const detailSchema = z.object({
 const validateDetails = (): boolean => {
   clearDetailErrors();
   const result = detailSchema.safeParse({
-    questions: detailsForm.questions,
-    responseTime: detailsForm.responseTime,
-    maxPlayers: detailsForm.maxPlayers
+    questions: detailsForm.value.questions,
+    responseTime: detailsForm.value.responseTime,
+    maxPlayers: detailsForm.value.maxPlayers
   });
+
+  console.log(detailsForm);
 
   if (!result.success) {
     const fieldErrors = result.error.formErrors.fieldErrors;
@@ -164,14 +178,14 @@ const validateDetails = (): boolean => {
 
 const validateQuestions = (): boolean => {
   questionsError.value = '';
-  if (!detailsForm.questions) {
+  if (!detailsForm.value.questions) {
     questionsError.value =
       'Set the total number of questions in the Details step before continuing.';
     return false;
   }
 
-  if (questions.value.length !== detailsForm.questions) {
-    const remaining = detailsForm.questions - questions.value.length;
+  if (questions.value.length !== detailsForm.value.questions) {
+    const remaining = detailsForm.value.questions - questions.value.length;
     questionsError.value =
       remaining > 0
         ? `Add ${remaining} more question${remaining === 1 ? '' : 's'} to continue.`
@@ -199,13 +213,29 @@ const tabItems = computed(() =>
   }))
 );
 
+const normalizedPayload = computed(() => ({
+  questions: detailsForm.value.questions,
+  responseTime: detailsForm.value.responseTime,
+  maxPlayers: detailsForm.value.maxPlayers,
+  totalConfiguredQuestions: questions.value.length,
+  questionData: questions.value.map((question) => ({
+    id: question.id,
+    prompt: question.prompt,
+    correctOptionId: question.correctOptionId,
+    options: question.options.map((option) => ({
+      id: option.id,
+      text: option.text
+    }))
+  }))
+}));
+
 const createId = () =>
   typeof crypto !== 'undefined' && 'randomUUID' in crypto
     ? crypto.randomUUID()
     : Math.random().toString(36).slice(2, 10);
 
 const handleAddQuestion = (question: CreateQuizQuestionInput) => {
-  const totalAllowed = detailsForm.questions;
+  const totalAllowed = detailsForm.value.questions;
   if (typeof totalAllowed === 'number' && questions.value.length >= totalAllowed) {
     return;
   }
@@ -243,8 +273,8 @@ const handleAddQuestion = (question: CreateQuizQuestionInput) => {
 const handleRemoveQuestion = (questionId: string) => {
   questions.value = questions.value.filter((question) => question.id !== questionId);
   if (
-    typeof detailsForm.questions === 'number' &&
-    questions.value.length < detailsForm.questions
+    typeof detailsForm.value.questions === 'number' &&
+    questions.value.length < detailsForm.value.questions
   ) {
     questionsError.value = '';
   }
@@ -262,6 +292,37 @@ const goNext = () => {
   }
 };
 
+const submitQuiz = async () => {
+  if (!validateDetails() || !validateQuestions()) {
+    activeStep.value = 0;
+    return;
+  }
+
+  submissionError.value = null;
+  successMessage.value = null;
+  submitting.value = true;
+
+  const roomNumber = `RM-${Math.random().toString(36).slice(2, 6).toUpperCase()}`;
+
+  try {
+    await $fetch('/api/quiz/create', {
+      method: 'POST',
+      body: {
+        roomNumber,
+        status: 'draft',
+        details: normalizedPayload.value
+      }
+    });
+
+    successMessage.value = `Quiz created! Room code: ${roomNumber}`;
+  } catch (error) {
+    submissionError.value =
+      error instanceof Error ? error.message : 'Failed to create the quiz.';
+  } finally {
+    submitting.value = false;
+  }
+};
+
 const goPrevious = () => {
   if (activeStep.value > 0) {
     activeStep.value -= 1;
@@ -269,7 +330,7 @@ const goPrevious = () => {
 };
 
 watch(
-  () => detailsForm.questions,
+  () => detailsForm.value.questions,
   (next) => {
     if (typeof next === 'number' && questions.value.length > next) {
       questions.value = questions.value.slice(0, next);
