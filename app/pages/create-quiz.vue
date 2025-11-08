@@ -280,7 +280,7 @@ const handleRemoveQuestion = (questionId: string) => {
   }
 };
 
-const goNext = () => {
+const goNext = async () => {
   if (!validateStep(activeStep.value)) {
     return;
   }
@@ -288,6 +288,7 @@ const goNext = () => {
   if (activeStep.value < tabs.length - 1) {
     const nextIndex = activeStep.value + 1;
     unlockedSteps.value[nextIndex] = true;
+    await nextTick();
     activeStep.value = nextIndex;
   }
 };
