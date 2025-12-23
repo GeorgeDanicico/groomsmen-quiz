@@ -1,4 +1,4 @@
-import type { JoinQuizRequest, JoinQuizResponse, QuizSessionView, SubmitAnswerPayload } from '../lib/types';
+import type { JoinQuizRequest, JoinQuizResponse, QuizSessionView, SubmitAnswerPayload } from '~/lib/types';
 
 interface SessionResponse {
   readonly view: QuizSessionView;

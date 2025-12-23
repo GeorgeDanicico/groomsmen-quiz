@@ -5,9 +5,14 @@ export default defineNuxtConfig({
   modules: [
     '@nuxt/image',
     '@nuxt/ui',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    '@nuxtjs/supabase'
   ],
   typescript: {
     strict: true
+  },
+  supabase: {
+    redirect: false,
+    
   }
 })

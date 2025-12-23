@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import { computed, onMounted, watch } from 'vue';
-import { QUESTION_DURATION_SECONDS } from '../../lib/constants';
+import { QUESTION_DURATION_SECONDS } from '../lib/constants';
 import { useQuizStore } from '../../stores/quiz';
-import QuizPlayerStatusList from '../../components/quiz/PlayerStatusList.vue';
-import QuizQuestion from '../../components/quiz/QuizQuestion.vue';
-import QuizResultsTable from '../../components/quiz/ResultsTable.vue';
-import QuizTimer from '../../components/quiz/QuizTimer.vue';
-import QuizAnswerReview from '../../components/quiz/AnswerReview.vue';
+import QuizPlayerStatusList from '~/components/quiz/PlayerStatusList.vue';
+import QuizQuestion from '~/components/quiz/QuizQuestion.vue';
+import QuizResultsTable from '~/components/quiz/ResultsTable.vue';
+import QuizTimer from '~/components/quiz/QuizTimer.vue';
+import QuizAnswerReview from '~/components/quiz/AnswerReview.vue';
 import { useRouter } from 'nuxt/app';
 
 const quizStore = useQuizStore();
