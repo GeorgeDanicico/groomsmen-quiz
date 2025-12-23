@@ -85,14 +85,14 @@
 import { computed, reactive, ref, watch } from 'vue';
 import { useRouter } from 'nuxt/app';
 import { z } from 'zod';
-import CreateQuizDetailsStep from '../../components/create-quiz/DetailsStep.vue';
-import CreateQuizQuestionsStep from '../../components/create-quiz/QuestionsStep.vue';
-import CreateQuizReviewStep from '../../components/create-quiz/ReviewStep.vue';
+import CreateQuizDetailsStep from '~/components/create-quiz/DetailsStep.vue';
+import CreateQuizQuestionsStep from '~/components/create-quiz/QuestionsStep.vue';
+import CreateQuizReviewStep from '~/components/create-quiz/ReviewStep.vue';
 import type {
   CreateQuizDetails,
   CreateQuizQuestionDraft,
   CreateQuizQuestionInput
-} from '../../lib/types';
+} from '../lib/types';
 
 const router = useRouter();
 

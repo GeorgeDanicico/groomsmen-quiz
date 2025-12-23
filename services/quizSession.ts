@@ -11,8 +11,8 @@ import type {
   SubmitAnswerPayload,
   QuizSessionState,
   QuizSessionView
-} from '../lib/types';
-import { QUESTION_DURATION_MS } from '../lib/constants';
+} from '../app/lib/types';
+import { QUESTION_DURATION_MS } from '../app/lib/constants';
 import { randomUUID } from 'node:crypto';
 import { createError } from 'h3';
 import { useStorage } from '#imports';
@@ -102,7 +102,7 @@ const getCurrentQuestion = (state: QuizSessionState): QuizQuestion | null => {
   if (state.currentQuestionIndex < 0 || state.currentQuestionIndex >= quizQuestions.length) {
     return null;
   }
-  return quizQuestions[state.currentQuestionIndex];
+  return quizQuestions[state.currentQuestionIndex] ?? null;
 };
 
 const finishSession = (state: QuizSessionState, now: number): QuizSessionState => {

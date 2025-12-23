@@ -117,10 +117,10 @@
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
 import { useQuizStore } from '../../stores/quiz';
-import QuizJoinForm from '../../components/quiz/JoinForm.vue';
-import QuizLobbyPanel from '../../components/quiz/LobbyPanel.vue';
-import QuizResultsTable from '../../components/quiz/ResultsTable.vue';
-import QuizAnswerReview from '../../components/quiz/AnswerReview.vue';
+import QuizJoinForm from '~/components/quiz/JoinForm.vue';
+import QuizLobbyPanel from '~/components/quiz/LobbyPanel.vue';
+import QuizResultsTable from '~/components/quiz/ResultsTable.vue';
+import QuizAnswerReview from '~/components/quiz/AnswerReview.vue';
 import { useRouter } from 'nuxt/app';
 
 const quizStore = useQuizStore();

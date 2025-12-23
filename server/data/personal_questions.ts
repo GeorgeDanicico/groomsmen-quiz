@@ -1,4 +1,4 @@
-import type { QuizQuestion } from '../../lib/types';
+import type { QuizQuestion } from '../../app/lib/types';
 
 export const quizQuestions: readonly QuizQuestion[] = [
   {
