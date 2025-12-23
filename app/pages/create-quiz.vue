@@ -5,7 +5,7 @@
         <div class="flex items-center justify-between">
           <div>
             <p class="text-sm font-medium text-gray-500 dark:text-gray-400">
-              Step {{ activeStep + 1 }} of 3
+              Step {{ currentStepNumber }} of {{ totalSteps }}
             </p>
             <h1 class="text-2xl font-semibold text-gray-900 dark:text-gray-100">
               Create your quiz
@@ -18,28 +18,29 @@
       </template>
 
       <div class="space-y-6">
-        <UTabs v-model="activeStep" :items="tabItems" class="w-full">
-          <template #item="{ index }">
+        <UStepper v-model="activeStep" :items="stepperItems" class="w-full">
+          <template #details>
             <CreateQuizDetailsStep
-              v-if="index === 0"
               v-model="detailsForm"
               :errors="detailsErrors"
             />
+          </template>
+          <template #questions>
             <CreateQuizQuestionsStep
-              v-else-if="index === 1"
               :max-questions="detailsForm.questions"
               :questions="questions"
               :error="questionsError"
               @add-question="handleAddQuestion"
               @remove-question="handleRemoveQuestion"
             />
+          </template>
+          <template #review>
             <CreateQuizReviewStep
-              v-else
               :details="detailsForm"
               :questions="questions"
             />
           </template>
-        </UTabs>
+        </UStepper>
 
         <div v-if="submissionError" class="rounded-md border border-rose-200 bg-rose-50 p-3 text-sm text-rose-700 dark:border-rose-900 dark:bg-rose-900/40 dark:text-rose-200">
           {{ submissionError }}
@@ -51,14 +52,14 @@
         <div class="flex items-center justify-between">
           <UButton
             variant="soft"
-            :disabled="activeStep === 0"
+            :disabled="isFirstStep"
             @click="goPrevious"
           >
             Back
           </UButton>
           <div class="flex items-center gap-2">
             <UButton
-              v-if="activeStep < tabs.length - 1"
+              v-if="!isLastStep"
               @click="goNext"
             >
               Next
@@ -93,14 +94,28 @@ import type {
 
 const router = useRouter();
 
-const tabs = [
-  { key: 'details', label: 'Details' },
-  { key: 'questions', label: 'Questions' },
-  { key: 'review', label: 'Review' }
+const steps = [
+  {
+    key: 'details',
+    title: 'Details',
+    description: 'Set question count, timer, and players.'
+  },
+  {
+    key: 'questions',
+    title: 'Questions',
+    description: 'Add and mark the correct answers.'
+  },
+  {
+    key: 'review',
+    title: 'Review',
+    description: 'Confirm the settings before creating.'
+  }
 ] as const;
 
+const totalSteps = steps.length;
+
 const activeStep = ref(0);
-const unlockedSteps = ref([true, false, false]);
+const unlockedSteps = ref(steps.map((_, index) => index === 0));
 
 const detailsForm = ref<CreateQuizDetails>({
   questions: null,
@@ -161,8 +176,6 @@ const validateDetails = (): boolean => {
     maxPlayers: detailsForm.value.maxPlayers
   });
 
-  console.log(detailsForm);
-
   if (!result.success) {
     const fieldErrors = result.error.formErrors.fieldErrors;
     detailsErrors.questions = fieldErrors.questions?.[0] ?? '';
@@ -203,12 +216,19 @@ const validateStep = (step: number): boolean => {
   return true;
 };
 
-const tabItems = computed(() =>
-  tabs.map((tab, index) => ({
-    ...tab,
+const stepperItems = computed(() =>
+  steps.map((step, index) => ({
+    value: index,
+    slot: step.key,
+    title: step.title,
+    description: step.description,
     disabled: !unlockedSteps.value[index]
   }))
 );
+
+const currentStepNumber = computed(() => activeStep.value + 1);
+const isLastStep = computed(() => activeStep.value >= totalSteps - 1);
+const isFirstStep = computed(() => activeStep.value === 0);
 
 const normalizedPayload = computed(() => ({
   questions: detailsForm.value.questions,
@@ -282,10 +302,9 @@ const goNext = async () => {
     return;
   }
 
-  if (activeStep.value < tabs.length - 1) {
+  if (!isLastStep.value) {
     const nextIndex = activeStep.value + 1;
     unlockedSteps.value[nextIndex] = true;
-    await nextTick();
     activeStep.value = nextIndex;
   }
 };
@@ -322,7 +341,7 @@ const submitQuiz = async () => {
 };
 
 const goPrevious = () => {
-  if (activeStep.value > 0) {
+  if (!isFirstStep.value) {
     activeStep.value -= 1;
   }
 };
