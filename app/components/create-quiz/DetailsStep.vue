@@ -50,7 +50,7 @@ watch(
 
 <template>
   <UForm class="grid gap-4 sm:grid-cols-3">
-    <UFormGroup
+    <UFormField
       label="Questions"
       required
       :error="errors.questions || undefined"
@@ -65,9 +65,9 @@ watch(
         size="xs"
         class="w-full max-w-[140px]"
       />
-    </UFormGroup>
+    </UFormField>
 
-    <UFormGroup
+    <UFormField
       label="Seconds"
       required
       :error="errors.responseTime || undefined"
@@ -82,9 +82,9 @@ watch(
         size="xs"
         class="w-full max-w-[140px]"
       />
-    </UFormGroup>
+    </UFormField>
 
-    <UFormGroup
+    <UFormField
       label="Players"
       required
       :error="errors.maxPlayers || undefined"
@@ -99,7 +99,6 @@ watch(
         size="xs"
         class="w-full max-w-[140px]"
       />
-    </UFormGroup>
+    </UFormField>
   </UForm>
 </template>
-

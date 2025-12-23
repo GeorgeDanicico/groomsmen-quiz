@@ -45,7 +45,6 @@
         </div>
         <UButton
           v-if="isHost"
-          color="primary"
           :disabled="!canStart"
           :loading="loading"
           @click="handleStart"

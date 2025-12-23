@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onMounted, watch } from 'vue';
 import { QUESTION_DURATION_SECONDS } from '../lib/constants';
-import { useQuizStore } from '../../stores/quiz';
+import { useQuizStore } from '~/stores/quiz';
 import QuizPlayerStatusList from '~/components/quiz/PlayerStatusList.vue';
 import QuizQuestion from '~/components/quiz/QuizQuestion.vue';
 import QuizResultsTable from '~/components/quiz/ResultsTable.vue';
@@ -110,7 +110,6 @@ if (import.meta.client) {
           />
           <UAlert
             v-if="status === 'finished'"
-            color="emerald"
             variant="soft"
             title="Quiz complete"
             description="Head back to the lobby to review the final standings."
@@ -137,7 +136,6 @@ if (import.meta.client) {
           <UButton
             v-if="status === 'finished'"
             block
-            color="primary"
             variant="soft"
             @click="router.push('/')"
           >
@@ -149,7 +147,6 @@ if (import.meta.client) {
       <UAlert
         v-if="quizStore.errorMessage && status !== 'lobby'"
         class="mt-6"
-        color="rose"
         title="Connection issue"
         :description="quizStore.errorMessage"
       />

@@ -7,9 +7,9 @@ import type {
   QuizQuestionResult,
   QuizSessionView,
   JoinQuizRequest
-} from '../app/lib/types';
-import { useQuizSessionApi } from '../composables/useQuizSessionApi';
-import { QUIZ_POLLING_INTERVAL_MS } from '../app/lib/constants';
+} from '~/lib/types';
+import { useQuizSessionApi } from '~/composables/useQuizSessionApi';
+import { QUIZ_POLLING_INTERVAL_MS } from '~/lib/constants';
 
 const PLAYER_STORAGE_KEY = 'groomsmen-quiz/player';
 

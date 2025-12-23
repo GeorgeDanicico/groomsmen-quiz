@@ -1,7 +1,7 @@
 <template>
   <UCard>
     <form class="space-y-4" @submit.prevent="handleSubmit">
-      <UFormGroup label="Your name" :error="error ?? undefined" for="player-name">
+      <UFormField label="Your name" :error="error ?? undefined">
         <UInput
           id="player-name"
           v-model="inputValue"
@@ -9,11 +9,10 @@
           placeholder="Groomsman name"
           autofocus
         />
-      </UFormGroup>
+      </UFormField>
       <div class="flex items-center gap-3">
         <UButton
           type="submit"
-          color="primary"
           :loading="loading"
           :disabled="disabled || inputValue.trim().length === 0"
         >
