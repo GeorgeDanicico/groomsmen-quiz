@@ -9,7 +9,6 @@
       <UButton
         v-for="option in question.options"
         :key="option.id"
-        color="primary"
         :variant="selectedOptionId === option.id ? 'solid' : 'outline'"
         :disabled="disabled"
         block

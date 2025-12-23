@@ -11,7 +11,7 @@
               Create your quiz
             </h1>
           </div>
-          <UButton color="gray" variant="ghost" @click="router.back()">
+          <UButton variant="ghost" @click="router.back()">
             Cancel
           </UButton>
         </div>
@@ -50,7 +50,6 @@
 
         <div class="flex items-center justify-between">
           <UButton
-            color="gray"
             variant="soft"
             :disabled="activeStep === 0"
             @click="goPrevious"
@@ -60,14 +59,12 @@
           <div class="flex items-center gap-2">
             <UButton
               v-if="activeStep < tabs.length - 1"
-              color="primary"
               @click="goNext"
             >
               Next
             </UButton>
             <UButton
               v-else
-              color="primary"
               :loading="submitting"
               :disabled="submitting"
               @click="submitQuiz"

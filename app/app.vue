@@ -1,6 +1,11 @@
 <template>
-  <NuxtLayout>
-    <NuxtRouteAnnouncer />
-    <NuxtPage />
-  </NuxtLayout>
+  <UApp>
+
+    <UMain>
+      <NuxtLayout>
+        <NuxtRouteAnnouncer />
+        <NuxtPage />
+      </NuxtLayout>
+    </UMain>
+  </UApp>
 </template>

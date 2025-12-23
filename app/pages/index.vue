@@ -21,7 +21,7 @@
               Build a fresh quiz session for your groomsmen. Add your questions and host the game.
             </p>
           </div>
-          <UButton color="primary" block @click="router.push('/create-quiz')">
+          <UButton block @click="router.push('/create-quiz')">
             Create Quiz
           </UButton>
         </UCard>
@@ -37,7 +37,7 @@
           </div>
           <UForm class="space-y-3">
             <UInput placeholder="Enter quiz passcode" disabled />
-            <UButton color="primary" block disabled>
+            <UButton block disabled>
               Join Quiz (coming soon)
             </UButton>
           </UForm>
@@ -46,7 +46,7 @@
 
       <div class="grid gap-6 lg:grid-cols-2">
         <div class="space-y-4">
-          <QuizJoinForm
+          <JoinForm
             v-if="!hasPlayer"
             v-model="nameInput"
             :loading="quizStore.loading"
@@ -71,7 +71,7 @@
                 <p class="text-sm text-gray-500 dark:text-gray-400">
                   The quiz has started — jump in!
                 </p>
-                <UButton color="primary" @click="router.push('/quiz')">
+                <UButton @click="router.push('/quiz')">
                   Go to Quiz
                 </UButton>
               </div>
@@ -80,7 +80,6 @@
 
           <UAlert
             v-if="quizStore.errorMessage && status === 'lobby'"
-            color="rose"
             title="Something went wrong"
             :description="quizStore.errorMessage"
           />
@@ -106,7 +105,7 @@
           :players="players"
           :questions="quizStore.questionResults"
         />
-        <UButton color="primary" variant="soft" @click="quizStore.syncSession()">
+        <UButton variant="soft" @click="quizStore.syncSession()">
           Refresh Results
         </UButton>
       </section>
@@ -116,8 +115,8 @@
 
 <script setup lang="ts">
 import { computed, onMounted, ref, watch } from 'vue';
-import { useQuizStore } from '../../stores/quiz';
-import QuizJoinForm from '~/components/quiz/JoinForm.vue';
+import { useQuizStore } from '~/stores/quiz';
+import JoinForm from '~/components/quiz/JoinForm.vue';
 import QuizLobbyPanel from '~/components/quiz/LobbyPanel.vue';
 import QuizResultsTable from '~/components/quiz/ResultsTable.vue';
 import QuizAnswerReview from '~/components/quiz/AnswerReview.vue';

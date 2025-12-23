@@ -172,7 +172,6 @@ const handleRemoveQuestion = (questionId: string) => {
         </p>
       </div>
       <UButton
-        color="primary"
         size="sm"
         :disabled="maxReached"
         @click="openForm"
@@ -183,21 +182,20 @@ const handleRemoveQuestion = (questionId: string) => {
 
     <UAlert
       v-if="error"
-      color="amber"
       variant="subtle"
       :description="error"
     />
 
     <transition name="fade">
       <UCard v-if="showForm" class="space-y-4">
-        <UFormGroup label="Question" required :error="newQuestionErrors.prompt || undefined">
+        <UFormField label="Question" required :error="newQuestionErrors.prompt || undefined">
           <UTextarea
             v-model="newQuestion.prompt"
             placeholder="Type the question prompt"
             autoresize
             size="sm"
           />
-        </UFormGroup>
+        </UFormField>
 
         <div>
           <div class="mb-2 flex items-center justify-between">
@@ -205,7 +203,6 @@ const handleRemoveQuestion = (questionId: string) => {
               Answers
             </span>
             <UButton
-              color="gray"
               variant="soft"
               size="xs"
               :disabled="newQuestion.options.length >= 6"
@@ -236,7 +233,6 @@ const handleRemoveQuestion = (questionId: string) => {
               />
               <UTooltip text="Remove answer" :disabled="newQuestion.options.length <= 2">
                 <UButton
-                  color="gray"
                   variant="ghost"
                   icon="i-heroicons-x-mark"
                   size="xs"
@@ -256,10 +252,10 @@ const handleRemoveQuestion = (questionId: string) => {
         </div>
 
         <div class="flex items-center justify-end gap-2">
-          <UButton color="gray" variant="soft" size="sm" @click="showForm = false">
+          <UButton variant="soft" size="sm" @click="showForm = false">
             Cancel
           </UButton>
-          <UButton color="primary" size="sm" @click="saveQuestion">
+          <UButton size="sm" @click="saveQuestion">
             Save question
           </UButton>
         </div>
@@ -305,7 +301,6 @@ const handleRemoveQuestion = (questionId: string) => {
             </ul>
           </div>
           <UButton
-            color="gray"
             variant="ghost"
             icon="i-heroicons-trash"
             size="xs"
